@@ -50,7 +50,14 @@ type Key struct {
 
 // Public returns this key's public key.
 func (key Key) Public() crypto.PublicKey {
-	return key.publicKey
+
+	switch key.publicKey.(type) {
+	case rsa.PublicKey:
+		rsakey := key.publicKey.(rsa.PublicKey)
+		return &rsakey
+	}
+
+	return &key.publicKey
 }
 
 // Decrypt decrypts ciphertext with this key. If opts is nil or of type
